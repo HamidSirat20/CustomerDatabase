@@ -1,0 +1,23 @@
+# Build Folders
+bin/
+obj/
+
+# User-Specific Files
+.vscode/
+*.csproj.user
+.vs/
+
+# Temporary Files
+*.log
+
+# Secrets (optional)
+appsettings.json
+appsettings.Development.json
+
+# Generated Files
+*.dll
+*.pdb
+*.cache
+
+# Git Files
+.git/
