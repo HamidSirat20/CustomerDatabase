@@ -7,7 +7,7 @@ function App() {
   return (
     <>
       <div className="container">
-        <Header subtile="Customers data will be stored and protected." />
+        <Header subtitle="Customers data will be stored and protected." />
       </div>
     </>
   );
