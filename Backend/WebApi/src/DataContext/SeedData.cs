@@ -14,7 +14,7 @@ public static class SeedData
         );
 
         modelBuilder.Entity<Customer>().HasData(
-            new Customer { Id = 1, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com", AddressId = 1 },
+            new Customer { Id = 1, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com",AddressId = 1 },
             new Customer { Id = 2, FirstName = "Jane", LastName = "Smith", Email = "jane.smith@example.com", AddressId = 2 },
             new Customer { Id = 3, FirstName = "Alice", LastName = "Brown", Email = "alice.brown@example.com", AddressId = 3 }
         );

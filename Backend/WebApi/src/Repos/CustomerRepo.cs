@@ -1,66 +1,46 @@
+using System.Runtime.InteropServices;
+using Domain.src.Common;
+using Domain.src.Dtos;
 using Domain.src.Entities;
 using Domain.src.RepoInterfaces;
+using Microsoft.EntityFrameworkCore;
+using WebApi.src.DataContext;
 
 namespace WebApi.src.Repos;
 
 
 public class CustomerRepo : ICustomerRepo
 {
-    private readonly List<Customer> _customers;
+    private readonly CustomerDbContext _context;
 
-    public CustomerRepo()
+    public CustomerRepo(CustomerDbContext context)
     {
-        _customers = new List<Customer>();
+        _context = context;
     }
 
-    public IEnumerable<Customer> GetAllCustomers()
+    public Task AddCustomerAsync(Customer customer)
     {
-        return _customers;
+        throw new NotImplementedException();
     }
 
-    public Customer GetCustomerById(int id)
+    public Task DeleteCustomerAsync(int id)
     {
-        return _customers.FirstOrDefault(c => c.Id == id);
+        throw new NotImplementedException();
     }
 
-    public void AddCustomer(Customer customer)
+    public async Task<IEnumerable<CustomerDto>> GetAllCustomersAsync(QueryParameters queryParameters)
     {
-        if (customer == null)
-        {
-            throw new ArgumentNullException(nameof(customer), "Customer cannot be null");
-        }
-
-        _customers.Add(customer);
+        return await _context.customers.Select(c => new CustomerDto(c.Id,c.FirstName,c.LastName,c.Email,c.Address)
+            ).ToListAsync();
     }
 
-    public void UpdateCustomer(Customer customer)
+    public Task<CustomerDto> GetCustomerByIdAsync(int id)
     {
-        // if (customer == null)
-        // {
-        //     throw new ArgumentNullException(nameof(customer), "Customer cannot be null");
-        // }
-
-        // var existingCustomer = GetCustomerById(customer.Id);
-        // if (existingCustomer == null)
-        // {
-        //     throw new InvalidOperationException($"Customer with ID {customer.Id} does not exist.");
-        // }
-
-        // // Assuming a shallow copy of properties for the update
-        // existingCustomer.Name = customer.Name;
-        // existingCustomer.Email = customer.Email;
-        // existingCustomer.Phone = customer.Phone;
-        // Add more properties as necessary
+        throw new NotImplementedException();
     }
 
-    public void DeleteCustomer(int id)
+    public Task UpdateCustomerAsync(Customer customer)
     {
-        var customer = GetCustomerById(id);
-        if (customer == null)
-        {
-            throw new InvalidOperationException($"Customer with ID {id} does not exist.");
-        }
-
-        _customers.Remove(customer);
+        throw new NotImplementedException();
     }
 }
