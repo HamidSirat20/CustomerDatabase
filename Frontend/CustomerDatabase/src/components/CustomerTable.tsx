@@ -1,10 +1,18 @@
-import { useEffect, useState } from "react";
-import CustomerType from "../types/CustomerType";
-import config from "../config";
-import useFetchCustomers from "../hooks/CustomerDataHooks";
+import { useEffect } from "react";
+
+import { getAllCustomers } from "../redux/reducers/customersReducer";
+import {
+  useCustomDispatch,
+  useCustomSelector,
+} from "../hooks/useCustomSelector";
 
 const CustomerTable = () => {
-  const customers = useFetchCustomers();
+  const customers = useCustomSelector((state) => state.customersReducer);
+  console.log("testing", customers);
+  const dispatch = useCustomDispatch();
+  useEffect(() => {
+    dispatch(getAllCustomers());
+  }, []);
 
   return (
     <>

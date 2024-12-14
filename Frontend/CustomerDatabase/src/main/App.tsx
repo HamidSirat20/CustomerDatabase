@@ -4,7 +4,6 @@ import Header from "./Header";
 import CustomerTable from "../components/CustomerTable";
 
 function App() {
-  const [count, setCount] = useState(0);
   return (
     <>
       <div className="container">
