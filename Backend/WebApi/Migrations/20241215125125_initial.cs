@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -38,6 +39,8 @@ namespace WebApi.Migrations
                     FirstName = table.Column<string>(type: "TEXT", nullable: false),
                     LastName = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
+                    MobileNumber = table.Column<string>(type: "TEXT", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "TEXT", nullable: false),
                     AddressId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -63,12 +66,12 @@ namespace WebApi.Migrations
 
             migrationBuilder.InsertData(
                 table: "customers",
-                columns: new[] { "Id", "AddressId", "Email", "FirstName", "LastName" },
+                columns: new[] { "Id", "AddressId", "DateOfBirth", "Email", "FirstName", "LastName", "MobileNumber" },
                 values: new object[,]
                 {
-                    { 1, 1, "john.doe@example.com", "John", "Doe" },
-                    { 2, 2, "jane.smith@example.com", "Jane", "Smith" },
-                    { 3, 3, "alice.brown@example.com", "Alice", "Brown" }
+                    { 1, 1, new DateTime(1985, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "john.doe@example.com", "John", "Doe", "045393883" },
+                    { 2, 2, new DateTime(1990, 7, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "jane.smith@example.com", "Jane", "Smith", "045893342" },
+                    { 3, 3, new DateTime(1995, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "alice.brown@example.com", "Alice", "Brown", "045894521" }
                 });
 
             migrationBuilder.CreateIndex(

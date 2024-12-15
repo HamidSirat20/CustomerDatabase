@@ -14,9 +14,36 @@ public static class SeedData
         );
 
         modelBuilder.Entity<Customer>().HasData(
-            new Customer { Id = 1, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com",AddressId = 1 },
-            new Customer { Id = 2, FirstName = "Jane", LastName = "Smith", Email = "jane.smith@example.com", AddressId = 2 },
-            new Customer { Id = 3, FirstName = "Alice", LastName = "Brown", Email = "alice.brown@example.com", AddressId = 3 }
+            new Customer
+            {
+                Id = 1,
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "john.doe@example.com",
+                MobileNumber = "045393883",
+                DateOfBirth = new DateTime(1985, 5, 15),
+                AddressId = 1
+            },
+            new Customer
+            {
+                Id = 2,
+                FirstName = "Jane",
+                LastName = "Smith",
+                Email = "jane.smith@example.com",
+                MobileNumber = "045893342",
+                DateOfBirth = new DateTime(1990, 7, 20),
+                AddressId = 2
+            },
+            new Customer
+            {
+                Id = 3,
+                FirstName = "Alice",
+                LastName = "Brown",
+                Email = "alice.brown@example.com",
+                MobileNumber = "045894521",
+                DateOfBirth = new DateTime(1995, 3, 12),
+                AddressId = 3
+            }
         );
 
     }

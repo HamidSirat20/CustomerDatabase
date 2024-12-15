@@ -1,4 +1,5 @@
 using Domain.src.Common;
+using Domain.src.Dtos;
 using Domain.src.RepoInterfaces;
 using Microsoft.EntityFrameworkCore;
 using WebApi.src.DataContext;
@@ -32,8 +33,20 @@ app.UseCors(p => p.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAn
 app.UseHttpsRedirection();
 
 
-app.MapGet("/customers", (ICustomerRepo repo) =>
-                        repo.GetAllCustomersAsync(new QueryParameters()));
+app.MapGet("/customers", async (ICustomerRepo repo) =>
+    {
+        return await repo.GetAllCustomersAsync(new QueryParameters());
+    }).Produces<CustomerDto[]>(StatusCodes.Status200OK);
+
+app.MapGet("/customers/{Id:int}", async (int Id, ICustomerRepo repo) =>
+      {
+          var customer = await repo.GetCustomerByIdAsync(Id);
+          if (customer == null)
+          {
+              return Results.Problem($"Customer with Id {Id} not found!", statusCode: 404);
+          }
+          return Results.Ok(customer);
+      }).ProducesProblem(404).Produces<ReadCustomerDto>(StatusCodes.Status200OK);
 
 
 app.Run();

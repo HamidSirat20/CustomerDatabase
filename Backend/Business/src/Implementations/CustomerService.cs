@@ -1,6 +1,8 @@
 using Business.src.Interfaces;
+using Domain.src.Common;
 using Domain.src.Entities;
 using Domain.src.RepoInterfaces;
+using Domain.src.Dtos;
 
 namespace Business.src.Implementations;
 
@@ -12,38 +14,29 @@ public class CustomerService : ICustomerService
     {
         _customerRepo = customerRepo;
     }
-    public void CreateCustomer(Customer customer)
+
+    public Task CreateCustomer(Customer customer)
     {
-        if(string.IsNullOrEmpty(customer.FirstName)) throw new ArgumentNullException("FirstName is required!");
-        _customerRepo.AddCustomer(customer);
+        throw new NotImplementedException();
     }
 
-    public void DeleteCustomer(int id)
+    public Task DeleteCustomer(int id)
     {
-        _customerRepo.DeleteCustomer(id);
+        throw new NotImplementedException();
     }
 
-    public IEnumerable<Customer> GetAllCustomers()
+    public Task<IEnumerable<CustomerDto>> GetAllCustomers(QueryParameters queryParameters)
     {
-        return _customerRepo.GetAllCustomers();
+        throw new NotImplementedException();
     }
 
-    public Customer GetCustomerById(int id)
+    public Task<ReadCustomerDto> GetCustomerById(int id)
     {
-        return _customerRepo.GetCustomerById(id);
+        throw new NotImplementedException();
     }
 
-    public void UpdateCustomer(Customer customer)
+    public Task UpdateCustomer(Customer customer)
     {
-        var customerId = customer.Id;
-        var foundCustomer = _customerRepo.GetCustomerById(customerId);
-        if(foundCustomer != null)
-        {
-            _customerRepo.UpdateCustomer(customer);
-        }
-        else
-        {
-            throw new ArgumentNullException($"Customer with {customer.Id} id not found!");
-        }
+        throw new NotImplementedException();
     }
 }

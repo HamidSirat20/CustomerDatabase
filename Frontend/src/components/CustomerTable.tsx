@@ -5,14 +5,21 @@ import {
   useCustomDispatch,
   useCustomSelector,
 } from "../hooks/useCustomSelector";
+import LoadingStatus from "./LoadingStatus";
 
 const CustomerTable = () => {
-  const customers = useCustomSelector((state) => state.customersReducer);
-  console.log("testing", customers);
+  const { customers, status, error, isSuccess } = useCustomSelector(
+    (state) => state.customersReducer
+  );
+
   const dispatch = useCustomDispatch();
   useEffect(() => {
     dispatch(getAllCustomers());
-  }, []);
+  }, [dispatch]);
+
+  if (!isSuccess) {
+    return <LoadingStatus status={status}></LoadingStatus>;
+  }
 
   return (
     <>

@@ -1,12 +1,14 @@
+using Domain.src.Common;
 using Domain.src.Entities;
+using Domain.src.Dtos;
 
 namespace Business.src.Interfaces;
 
 public interface ICustomerService
 {
-    IEnumerable<Customer> GetAllCustomers();
-    Customer GetCustomerById(int id);
-    void CreateCustomer(Customer customer);
-    void UpdateCustomer(Customer customer);
-    void DeleteCustomer(int id);
+    Task<IEnumerable<CustomerDto>> GetAllCustomers(QueryParameters queryParameters);
+    Task<ReadCustomerDto> GetCustomerById(int id);
+    Task CreateCustomer(Customer customer);
+    Task UpdateCustomer(Customer customer);
+    Task DeleteCustomer(int id);
 }

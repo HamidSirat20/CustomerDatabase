@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices;
 using Domain.src.Common;
 using Domain.src.Dtos;
 using Domain.src.Entities;
@@ -30,17 +29,29 @@ public class CustomerRepo : ICustomerRepo
 
     public async Task<IEnumerable<CustomerDto>> GetAllCustomersAsync(QueryParameters queryParameters)
     {
-        return await _context.customers.Select(c => new CustomerDto(c.Id,c.FirstName,c.LastName,c.Email,c.Address)
+        return await _context.customers.Select(c => new CustomerDto(c.Id, c.FirstName, c.LastName, c.Email, c.Address)
             ).ToListAsync();
     }
 
-    public Task<CustomerDto> GetCustomerByIdAsync(int id)
+    public async Task<ReadCustomerDto> GetCustomerByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        var c = await _context.customers.Include(c => c.Address)
+        .SingleOrDefaultAsync(c => c.Id == id);
+        if (c != null)
+        {
+            return new ReadCustomerDto(c.Id, c.FirstName, c.LastName, c.Email, c.MobileNumber, c.DateOfBirth, c.Address);
+
+        }
+        else
+        {
+            return null;
+        }
+
     }
 
     public Task UpdateCustomerAsync(Customer customer)
     {
         throw new NotImplementedException();
     }
+
 }

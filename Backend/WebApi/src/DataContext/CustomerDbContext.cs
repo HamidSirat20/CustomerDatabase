@@ -25,7 +25,7 @@ public class CustomerDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Customer>()
+        modelBuilder.Entity<Customer>().ToTable("customers")
         .HasOne(c => c.Address)
         .WithMany()
         .HasForeignKey(c => c.AddressId);
