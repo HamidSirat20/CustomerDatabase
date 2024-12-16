@@ -41,6 +41,7 @@ namespace WebApi.Migrations
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     MobileNumber = table.Column<string>(type: "TEXT", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Image = table.Column<string>(type: "TEXT", nullable: true),
                     AddressId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -66,12 +67,12 @@ namespace WebApi.Migrations
 
             migrationBuilder.InsertData(
                 table: "customers",
-                columns: new[] { "Id", "AddressId", "DateOfBirth", "Email", "FirstName", "LastName", "MobileNumber" },
+                columns: new[] { "Id", "AddressId", "DateOfBirth", "Email", "FirstName", "Image", "LastName", "MobileNumber" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(1985, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "john.doe@example.com", "John", "Doe", "045393883" },
-                    { 2, 2, new DateTime(1990, 7, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "jane.smith@example.com", "Jane", "Smith", "045893342" },
-                    { 3, 3, new DateTime(1995, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "alice.brown@example.com", "Alice", "Brown", "045894521" }
+                    { 1, 1, new DateTime(1985, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "john.doe@example.com", "John", null, "Doe", "045393883" },
+                    { 2, 2, new DateTime(1990, 7, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), "jane.smith@example.com", "Jane", null, "Smith", "045893342" },
+                    { 3, 3, new DateTime(1995, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "alice.brown@example.com", "Alice", null, "Brown", "045894521" }
                 });
 
             migrationBuilder.CreateIndex(

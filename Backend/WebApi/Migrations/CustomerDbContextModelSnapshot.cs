@@ -97,6 +97,9 @@ namespace WebApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Image")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -109,7 +112,7 @@ namespace WebApi.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.ToTable("customers");
+                    b.ToTable("customers", (string)null);
 
                     b.HasData(
                         new

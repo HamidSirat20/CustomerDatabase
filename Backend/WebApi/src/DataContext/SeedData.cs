@@ -22,6 +22,7 @@ public static class SeedData
                 Email = "john.doe@example.com",
                 MobileNumber = "045393883",
                 DateOfBirth = new DateTime(1985, 5, 15),
+                Image = null,
                 AddressId = 1
             },
             new Customer
@@ -32,6 +33,7 @@ public static class SeedData
                 Email = "jane.smith@example.com",
                 MobileNumber = "045893342",
                 DateOfBirth = new DateTime(1990, 7, 20),
+                Image = null,
                 AddressId = 2
             },
             new Customer
@@ -42,6 +44,7 @@ public static class SeedData
                 Email = "alice.brown@example.com",
                 MobileNumber = "045894521",
                 DateOfBirth = new DateTime(1995, 3, 12),
+                Image = null,
                 AddressId = 3
             }
         );

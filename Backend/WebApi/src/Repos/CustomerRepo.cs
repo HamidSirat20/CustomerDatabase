@@ -29,7 +29,7 @@ public class CustomerRepo : ICustomerRepo
 
     public async Task<IEnumerable<CustomerDto>> GetAllCustomersAsync(QueryParameters queryParameters)
     {
-        return await _context.customers.Select(c => new CustomerDto(c.Id, c.FirstName, c.LastName, c.Email, c.Address)
+        return await _context.customers.Select(c => new CustomerDto(c.Id, c.FirstName, c.LastName, c.Email, c.Image, c.Address)
             ).ToListAsync();
     }
 
@@ -39,7 +39,7 @@ public class CustomerRepo : ICustomerRepo
         .SingleOrDefaultAsync(c => c.Id == id);
         if (c != null)
         {
-            return new ReadCustomerDto(c.Id, c.FirstName, c.LastName, c.Email, c.MobileNumber, c.DateOfBirth, c.Address);
+            return new ReadCustomerDto(c.Id, c.FirstName, c.LastName, c.Email, c.MobileNumber, c.DateOfBirth, c.Image, c.Address);
 
         }
         else

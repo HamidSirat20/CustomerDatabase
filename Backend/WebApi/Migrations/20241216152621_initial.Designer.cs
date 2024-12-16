@@ -11,7 +11,7 @@ using WebApi.src.DataContext;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(CustomerDbContext))]
-    [Migration("20241215125125_initial")]
+    [Migration("20241216152621_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -100,6 +100,9 @@ namespace WebApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Image")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -112,7 +115,7 @@ namespace WebApi.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.ToTable("customers");
+                    b.ToTable("customers", (string)null);
 
                     b.HasData(
                         new
