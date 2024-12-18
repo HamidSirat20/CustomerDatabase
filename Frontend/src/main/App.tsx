@@ -1,10 +1,11 @@
 import "./App.css";
-import Header from "./Header";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import CustomerTable from "../components/CustomerTable";
-import CustomerDetails from "../components/CustomerDetails";
-import Hamid from "../components/Hamid";
+import CustomerDetails from "../components/customers/CustomerDetails";
+import About from "../components/about/About";
+import PageNotFound from "../components/PageNotFound";
+import CustomersPage from "../components/customers/CustomersPage";
+import Header from "../components/nav/Header";
 
 function App() {
   return (
@@ -13,8 +14,10 @@ function App() {
         <div className="container">
           <Header subtitle="Customers data will be stored and protected." />
           <Routes>
-            <Route path="/" element={<CustomerTable />} />
+            <Route path="/" element={<CustomersPage />} />
+            <Route path="/about" element={<About />} />
             <Route path="/customers/:id" element={<CustomerDetails />} />
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </div>
       </BrowserRouter>

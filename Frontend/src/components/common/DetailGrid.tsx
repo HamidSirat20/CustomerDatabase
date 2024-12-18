@@ -1,5 +1,7 @@
-import CustomerType from "../types/CustomerType";
+import { Link } from "react-router-dom";
+import CustomerType from "../../types/CustomerType";
 import defaultImage from "./defaultPhoto";
+import BackToButton from "./BackToButton";
 
 interface Props {
   customers: CustomerType[];
@@ -15,6 +17,7 @@ const DetailGrid = ({ customers, buttonName, tableTile, actions }: Props) => {
   return (
     <>
       <div className="container mt-4">
+        <BackToButton route="/" buttonName="Go to Back" />
         <h1 className="text-center mb-4">{tableTile}</h1>
         {customers.map((customer) => (
           <div className="card">

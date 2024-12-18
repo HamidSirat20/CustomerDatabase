@@ -4,14 +4,14 @@ import { useEffect } from "react";
 import {
   useCustomDispatch,
   useCustomSelector,
-} from "../hooks/useCustomSelector";
-import LoadingStatus from "./LoadingStatus";
+} from "../../hooks/useCustomSelector";
+import LoadingStatus from "../common/LoadingStatus";
 import {
   deleteCustomer,
   getOneCustomerById,
-} from "../redux/reducers/customersReducer";
-import defaultImage from "./defaultPhoto";
-import DetailGrid from "./DetailGrid";
+} from "../../redux/reducers/customersReducer";
+import defaultImage from "../common/defaultPhoto";
+import DetailGrid from "../common/DetailGrid";
 
 const CustomerDetails = () => {
   const { id } = useParams();
@@ -46,6 +46,8 @@ const CustomerDetails = () => {
         No customer data found!
       </div>
     );
+
+  const customer = customers[0];
 
   return (
     <>

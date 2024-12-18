@@ -4,15 +4,15 @@ import { useNavigate } from "react-router-dom";
 import {
   deleteCustomer,
   getAllCustomers,
-} from "../redux/reducers/customersReducer";
+} from "../../redux/reducers/customersReducer";
 import {
   useCustomDispatch,
   useCustomSelector,
-} from "../hooks/useCustomSelector";
-import LoadingStatus from "./LoadingStatus";
-import CustomerGrid from "./CustomerGrid";
+} from "../../hooks/useCustomSelector";
+import LoadingStatus from "../common/LoadingStatus";
+import CustomerGrid from "../common/CustomerGrid";
 
-const CustomerTable = () => {
+const CustomersPage = () => {
   const dispatch = useCustomDispatch();
   const nav = useNavigate();
 
@@ -43,4 +43,4 @@ const CustomerTable = () => {
   );
 };
 
-export default CustomerTable;
+export default CustomersPage;
