@@ -45,6 +45,21 @@ export const getOneCustomerById = createAsyncThunk(
   }
 );
 
+export const deleteCustomer = createAsyncThunk<
+  { id: number },
+  number,
+  { rejectValue: string }
+>("deleteCustomer", async (id: number, ThunkAPI) => {
+  try {
+    const response = await axios.delete(`${config.baseUrl}/customers/${id}`);
+    const data = response.data;
+    return data;
+  } catch (error) {
+    const err = error as AxiosError;
+    return ThunkAPI.rejectWithValue(err.message);
+  }
+});
+
 const customersSlice = createSlice({
   name: "customers",
   initialState: initialState,
@@ -77,9 +92,33 @@ const customersSlice = createSlice({
       .addCase(getOneCustomerById.fulfilled, (state, action) => {
         state.status = "success";
         state.isSuccess = true;
-        state.customers = action.payload;
+        if (typeof action.payload === "string") {
+          state.error = action.payload;
+        } else {
+          state.customers = [action.payload];
+        }
       })
       .addCase(getOneCustomerById.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+
+      .addCase(deleteCustomer.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(deleteCustomer.fulfilled, (state, action) => {
+        state.status = "success";
+        state.isSuccess = true;
+        if (typeof action.payload === "string") {
+          state.error = action.payload;
+        } else {
+          state.customers = state.customers.filter(
+            (c) => c.id != action.payload.id
+          );
+        }
+      })
+      .addCase(deleteCustomer.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
       });

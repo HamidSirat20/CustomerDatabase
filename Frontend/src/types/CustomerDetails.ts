@@ -5,8 +5,9 @@ interface CustomerDetails {
   firstName: string;
   lastName: string;
   email: string;
-  phoneNumber: string,
-  dateOfBirth: Date,
+  phoneNumber: string;
+  dateOfBirth: Date;
+  image?: string;
   address: AddressType;
 }
 
