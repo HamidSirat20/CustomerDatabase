@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom";
 import CustomerType from "../../types/CustomerType";
-import defaultImage from "./defaultPhoto";
-import BackToButton from "./BackToButton";
+import BackToButton from "../common/BackToButton";
+import defaultImage from "../common/defaultPhoto";
 
 interface Props {
   customers: CustomerType[];

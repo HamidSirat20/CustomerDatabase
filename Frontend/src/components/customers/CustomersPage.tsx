@@ -10,7 +10,7 @@ import {
   useCustomSelector,
 } from "../../hooks/useCustomSelector";
 import LoadingStatus from "../common/LoadingStatus";
-import CustomerGrid from "../common/CustomerGrid";
+import CustomerGrid from "./CustomerGrid";
 
 const CustomersPage = () => {
   const dispatch = useCustomDispatch();

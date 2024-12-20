@@ -10,8 +10,7 @@ import {
   deleteCustomer,
   getOneCustomerById,
 } from "../../redux/reducers/customersReducer";
-import defaultImage from "../common/defaultPhoto";
-import DetailGrid from "../common/DetailGrid";
+import DetailGrid from "./DetailGrid";
 
 const CustomerDetails = () => {
   const { id } = useParams();
