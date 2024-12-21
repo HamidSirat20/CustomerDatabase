@@ -14,6 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 
+builder.Services.AddAutoMapper(typeof(Program));
 // Register DbContext
 builder.Services.AddDbContext<CustomerDbContext>(options =>
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
@@ -37,7 +38,7 @@ app.UseHttpsRedirection();
 app.MapGet("/customers", async (ICustomerRepo repo) =>
     {
         return await repo.GetAllCustomersAsync(new QueryParameters());
-    }).Produces<CustomerDto[]>(StatusCodes.Status200OK);
+    }).Produces<CustomerReadDto[]>(StatusCodes.Status200OK);
 
 app.MapGet("/customers/{Id:int}", async (int Id, ICustomerRepo repo) =>
       {
@@ -47,23 +48,23 @@ app.MapGet("/customers/{Id:int}", async (int Id, ICustomerRepo repo) =>
               return Results.Problem($"Customer with Id {Id} not found!", statusCode: 404);
           }
           return Results.Ok(customer);
-      }).ProducesProblem(404).Produces<ReadCustomerDto>(StatusCodes.Status200OK);
-app.MapPost("/customers", async ([FromBody] ReadCustomerDto dto, ICustomerRepo repo) =>
+      }).ProducesProblem(404).Produces<CustomerReadDto>(StatusCodes.Status200OK);
+app.MapPost("/customers", async ([FromBody] CustomerCreateDto dto, ICustomerRepo repo) =>
 {
     var customer = repo.AddCustomerAsync(dto);
     return Results.Created($"customers/{customer.Id}", customer);
-}).ProducesProblem(404).Produces<ReadCustomerDto>(StatusCodes.Status200OK);
+}).ProducesProblem(404).Produces<CustomerCreateDto>(StatusCodes.Status200OK);
 
-app.MapPut("/customers", async ([FromBody] ReadCustomerDto dto, ICustomerRepo repo) =>
+app.MapPut("/customers/{Id:int}", async ([FromBody] CustomerUpdateDto dto, int Id, ICustomerRepo repo) =>
 {
-    if (await repo.GetCustomerByIdAsync(dto.Id) == null)
+    if (await repo.GetCustomerByIdAsync(Id) == null)
     {
-        return Results.Problem($"Customer with {dto.Id} not found!", statusCode: 404);
+        return Results.Problem($"Customer with {Id} not found!", statusCode: 404);
     }
-    var updateCustomer = repo.UpdateCustomerAsync(dto);
+    var updateCustomer = repo.UpdateCustomerAsync(dto, Id);
     return Results.Ok(updateCustomer);
 
-}).ProducesProblem(404).Produces<ReadCustomerDto>(StatusCodes.Status200OK);
+}).ProducesProblem(404).Produces<CustomerUpdateDto>(StatusCodes.Status200OK);
 
 app.MapDelete("/customers/{Id:int}", async (int id, ICustomerRepo repo) =>
 {
@@ -73,7 +74,7 @@ app.MapDelete("/customers/{Id:int}", async (int id, ICustomerRepo repo) =>
     }
     await repo.DeleteCustomerAsync(id);
     return Results.Ok();
-}).ProducesProblem(404).Produces<ReadCustomerDto>(StatusCodes.Status200OK);
+}).ProducesProblem(404).Produces<CustomerReadDto>(StatusCodes.Status200OK);
 
 app.Run();
 

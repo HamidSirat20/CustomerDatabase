@@ -1,3 +1,4 @@
+using AutoMapper;
 using Domain.src.Common;
 using Domain.src.Dtos;
 using Domain.src.Entities;
@@ -11,16 +12,19 @@ namespace WebApi.src.Repos;
 public class CustomerRepo : ICustomerRepo
 {
     private readonly CustomerDbContext _context;
+    private readonly DbSet<Customer> _dbSet;
+    private readonly IMapper _autoMapper;
 
-    public CustomerRepo(CustomerDbContext context)
+    public CustomerRepo(CustomerDbContext context, IMapper mapper)
     {
         _context = context;
+        _autoMapper = mapper;
+        _dbSet = context.customers;
     }
 
-    public async Task AddCustomerAsync(ReadCustomerDto readCustomerDto)
+    public async Task AddCustomerAsync(CustomerCreateDto createDto)
     {
-        var customer = new Customer();
-        DtoToEntity(customer, readCustomerDto);
+        var customer = _autoMapper.Map<Customer>(createDto);
         await _context.AddAsync(customer);
         await _context.SaveChangesAsync();
     }
@@ -36,13 +40,47 @@ public class CustomerRepo : ICustomerRepo
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<CustomerDto>> GetAllCustomersAsync(QueryParameters queryParameters)
+    public async Task<IEnumerable<CustomerReadDto>> GetAllCustomersAsync(QueryParameters queryParameters)
     {
-        return await _context.customers.Select(c => new CustomerDto(c.Id, c.FirstName, c.LastName, c.Email, c.Image, c.Address)
-            ).ToListAsync();
+        var query = _dbSet.Include(c => c.Address).AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(queryParameters.Search))
+        {
+            string searchTerm = queryParameters.Search.ToLower();
+            query = query.Where(c =>
+                c.FirstName.ToLower().Contains(searchTerm) ||
+                c.LastName.ToLower().Contains(searchTerm) ||
+                c.Email.ToLower().Contains(searchTerm));
+        }
+
+        query = query
+            .Skip(queryParameters.Offset)
+            .Take(queryParameters.Limit);
+
+        var result = await query
+            .Select(c => new CustomerReadDto
+            {
+                Id = c.Id,
+                FirstName = c.FirstName,
+                LastName = c.LastName,
+                Email = c.Email,
+                MobileNumber = c.MobileNumber,
+                Address = new AddressReadDto
+                {
+                    Street = c.Address.Street,
+                    City = c.Address.City,
+                    State = c.Address.State,
+                    Country = c.Address.Country,
+                    ZipCode = c.Address.ZipCode
+                }
+            })
+            .ToListAsync();
+
+        return result;
+
     }
 
-    public async Task<ReadCustomerDto> GetCustomerByIdAsync(int id)
+    public async Task<CustomerReadDto> GetCustomerByIdAsync(int id)
     {
         var customer = await _context.customers.Include(c => c.Address)
         .SingleOrDefaultAsync(c => c.Id == id);
@@ -50,51 +88,21 @@ public class CustomerRepo : ICustomerRepo
         {
             throw new ArgumentNullException($"Customer with {id} not found!");
         }
-        return EntityToReadCustomerDto(customer);
+        return _autoMapper.Map<CustomerReadDto>(customer);
     }
 
-    public async Task UpdateCustomerAsync(ReadCustomerDto readCustomerDto)
+    public async Task UpdateCustomerAsync(CustomerUpdateDto updateDto, int id)
     {
-        var customer = await _context.customers.FindAsync(readCustomerDto.Id);
+        var customer = await _context.customers
+        .Include(c => c.Address)
+        .FirstOrDefaultAsync(c => c.Id == id);
+
         if (customer is null)
         {
-            throw new ArgumentNullException($"Customer with {readCustomerDto.Id} not found!");
-
+            throw new ArgumentException($"Customer with ID {id} not found!");
         }
-        DtoToEntity(customer, readCustomerDto);
+        _autoMapper.Map(updateDto, customer);
         _context.Entry(customer).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
-
-    private static void DtoToEntity(Customer customer, ReadCustomerDto dto)
-    {
-        customer.FirstName = dto.FirstName;
-        customer.LastName = dto.LastName;
-        customer.Email = dto.Email;
-        customer.MobileNumber = dto.MobileNumber;
-        customer.DateOfBirth = dto.DateOfBirth;
-        customer.Image = dto.Image;
-
-        if (dto.Address != null)
-        {
-            if (customer.Address == null)
-            {
-                customer.Address = new Address();
-            }
-            customer.Address.Id = dto.Address.Id;
-            customer.Address.Street = dto.Address.Street;
-            customer.Address.City = dto.Address.City;
-            customer.Address.State = dto.Address.State;
-            customer.Address.ZipCode = dto.Address.ZipCode;
-            customer.Address.Country = dto.Address.Country;
-            customer.AddressId = dto.Address.Id;
-        }
-    }
-
-    private static ReadCustomerDto EntityToReadCustomerDto(Customer c)
-    {
-        return new ReadCustomerDto(c.Id, c.FirstName, c.LastName, c.Email, c.MobileNumber, c.DateOfBirth, c.Image, c.Address);
-    }
-
-
 }
