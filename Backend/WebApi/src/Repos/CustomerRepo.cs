@@ -12,14 +12,12 @@ namespace WebApi.src.Repos;
 public class CustomerRepo : ICustomerRepo
 {
     private readonly CustomerDbContext _context;
-    private readonly DbSet<Customer> _dbSet;
     private readonly IMapper _autoMapper;
 
     public CustomerRepo(CustomerDbContext context, IMapper mapper)
     {
         _context = context;
         _autoMapper = mapper;
-        _dbSet = context.customers;
     }
 
     public async Task AddCustomerAsync(CustomerCreateDto createDto)
@@ -40,46 +38,11 @@ public class CustomerRepo : ICustomerRepo
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<CustomerReadDto>> GetAllCustomersAsync(QueryParameters queryParameters)
+    public async Task<IEnumerable<CustomerReadDto>> GetAllCustomersAsync()
     {
-        var query = _dbSet.Include(c => c.Address).AsQueryable();
-
-        if (!string.IsNullOrWhiteSpace(queryParameters.Search))
-        {
-            string searchTerm = queryParameters.Search.ToLower();
-            query = query.Where(c =>
-                c.FirstName.ToLower().Contains(searchTerm) ||
-                c.LastName.ToLower().Contains(searchTerm) ||
-                c.Email.ToLower().Contains(searchTerm));
-        }
-
-        query = query
-            .Skip(queryParameters.Offset)
-            .Take(queryParameters.Limit);
-
-        var result = await query
-            .Select(c => new CustomerReadDto
-            {
-                Id = c.Id,
-                FirstName = c.FirstName,
-                LastName = c.LastName,
-                Email = c.Email,
-                MobileNumber = c.MobileNumber,
-                Address = new AddressReadDto
-                {
-                    Street = c.Address.Street,
-                    City = c.Address.City,
-                    State = c.Address.State,
-                    Country = c.Address.Country,
-                    ZipCode = c.Address.ZipCode
-                }
-            })
-            .ToListAsync();
-
-        return result;
-
+        var customers = await _context.customers.Include(c => c.Address).ToListAsync();
+        return _autoMapper.Map<IEnumerable<CustomerReadDto>>(customers);
     }
-
     public async Task<CustomerReadDto> GetCustomerByIdAsync(int id)
     {
         var customer = await _context.customers.Include(c => c.Address)
@@ -101,8 +64,11 @@ public class CustomerRepo : ICustomerRepo
         {
             throw new ArgumentException($"Customer with ID {id} not found!");
         }
+
         _autoMapper.Map(updateDto, customer);
+        System.Console.WriteLine("customer logged: " + customer.Address.City);
         _context.Entry(customer).State = EntityState.Modified;
+        _context.Entry(customer.Address).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
 }

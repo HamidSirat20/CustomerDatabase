@@ -3,10 +3,13 @@ using Domain.src.Dtos;
 using Domain.src.RepoInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebApi.src.Common;
 using WebApi.src.DataContext;
 using WebApi.src.Repos;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -37,7 +40,9 @@ app.UseHttpsRedirection();
 
 app.MapGet("/customers", async (ICustomerRepo repo) =>
     {
-        return await repo.GetAllCustomersAsync(new QueryParameters());
+
+        return await repo.GetAllCustomersAsync();
+
     }).Produces<CustomerReadDto[]>(StatusCodes.Status200OK);
 
 app.MapGet("/customers/{Id:int}", async (int Id, ICustomerRepo repo) =>
@@ -49,6 +54,7 @@ app.MapGet("/customers/{Id:int}", async (int Id, ICustomerRepo repo) =>
           }
           return Results.Ok(customer);
       }).ProducesProblem(404).Produces<CustomerReadDto>(StatusCodes.Status200OK);
+
 app.MapPost("/customers", async ([FromBody] CustomerCreateDto dto, ICustomerRepo repo) =>
 {
     var customer = repo.AddCustomerAsync(dto);
