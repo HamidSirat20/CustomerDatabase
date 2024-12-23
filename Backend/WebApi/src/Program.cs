@@ -3,6 +3,7 @@ using Domain.src.Dtos;
 using Domain.src.RepoInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MiniValidation;
 using WebApi.src.Common;
 using WebApi.src.DataContext;
 using WebApi.src.Repos;
@@ -53,16 +54,24 @@ app.MapGet("/customers/{Id:int}", async (int Id, ICustomerRepo repo) =>
               return Results.Problem($"Customer with Id {Id} not found!", statusCode: 404);
           }
           return Results.Ok(customer);
-      }).ProducesProblem(404).Produces<CustomerReadDto>(StatusCodes.Status200OK);
+      }).ProducesProblem(404).Produces<CustomerReadDto>(StatusCodes.Status200OK).ProducesValidationProblem();
 
 app.MapPost("/customers", async ([FromBody] CustomerCreateDto dto, ICustomerRepo repo) =>
 {
+    if (!MiniValidator.TryValidate(dto, out var errors))
+    {
+        return Results.ValidationProblem(errors);
+    }
     var customer = repo.AddCustomerAsync(dto);
     return Results.Created($"customers/{customer.Id}", customer);
 }).ProducesProblem(404).Produces<CustomerCreateDto>(StatusCodes.Status200OK);
 
 app.MapPut("/customers/{Id:int}", async ([FromBody] CustomerUpdateDto dto, int Id, ICustomerRepo repo) =>
 {
+    if (!MiniValidator.TryValidate(dto, out var errors))
+    {
+        return Results.ValidationProblem(errors);
+    }
     if (await repo.GetCustomerByIdAsync(Id) == null)
     {
         return Results.Problem($"Customer with {Id} not found!", statusCode: 404);
@@ -70,7 +79,7 @@ app.MapPut("/customers/{Id:int}", async ([FromBody] CustomerUpdateDto dto, int I
     var updateCustomer = repo.UpdateCustomerAsync(dto, Id);
     return Results.Ok(updateCustomer);
 
-}).ProducesProblem(404).Produces<CustomerUpdateDto>(StatusCodes.Status200OK);
+}).ProducesProblem(404).Produces<CustomerUpdateDto>(StatusCodes.Status200OK).ProducesValidationProblem();
 
 app.MapDelete("/customers/{Id:int}", async (int id, ICustomerRepo repo) =>
 {
