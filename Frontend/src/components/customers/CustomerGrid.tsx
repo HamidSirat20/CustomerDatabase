@@ -1,4 +1,5 @@
-import CustomerType from "../types/CustomerType";
+import { Link } from "react-router-dom";
+import CustomerType from "../../types/CustomerType";
 
 interface Props {
   customers: CustomerType[];
@@ -45,6 +46,22 @@ const CustomerGrid = ({ customers, nav, actions }: Props) => {
           ))}
         </tbody>
       </table>
+      <div className="row mt-3">
+        <div className="col-12">
+          <Link
+            className="btn btn-outline-success btn-lg d-block w-100"
+            to={`customers/add`}>
+            Add Customer
+            <img
+              width="24"
+              height="24"
+              src="https://img.icons8.com/color/48/add--v1.png"
+              alt="add--v1"
+              className="ml-10"
+            />
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };

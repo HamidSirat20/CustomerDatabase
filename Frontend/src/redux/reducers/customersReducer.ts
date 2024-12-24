@@ -1,8 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 
 import config from "../../config";
 import CustomerType from "../../types/CustomerType";
+import CustomerCreateEditType from "../../types/CustomerCreateEditType";
 
 interface CustomersState {
   customers: CustomerType[];
@@ -16,6 +17,11 @@ const initialState: CustomersState = {
   isSuccess: false,
   error: null,
 };
+
+export interface EditCustomerType {
+  id: number;
+  customer: CustomerCreateEditType;
+}
 
 export const getAllCustomers = createAsyncThunk(
   "fetchAllCustomers",
@@ -35,9 +41,11 @@ export const getOneCustomerById = createAsyncThunk(
   "fetchACustomer",
   async (id: number, ThunkAPI) => {
     try {
+      console.log("Fetch result before:");
       const result = await axios.get(`${config.baseUrl}/customers/${id}`);
       const data = await result.data;
       return data;
+      console.log("Fetch result after:", data);
     } catch (error) {
       const err = error as AxiosError;
       return ThunkAPI.rejectWithValue(err.message);
@@ -62,8 +70,9 @@ export const deleteCustomer = createAsyncThunk<
 
 export const createCustomer = createAsyncThunk(
   "createCustomer",
-  async (customer: CustomerType, ThunkAPI) => {
+  async (customer: CustomerCreateEditType, { rejectWithValue }) => {
     try {
+      console.log("trying before respones");
       const response = await axios.post(
         `${config.baseUrl}/customers`,
         customer
@@ -71,7 +80,23 @@ export const createCustomer = createAsyncThunk(
       return response.data;
     } catch (error) {
       const err = error as AxiosError;
-      return ThunkAPI.rejectWithValue(err.message);
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+export const editCustomer = createAsyncThunk(
+  "editCustomer",
+  async (editCustomer: EditCustomerType, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `${config.baseUrl}/customers/${editCustomer.id}`,
+        editCustomer.customer
+      );
+      return response.data;
+    } catch (error) {
+      const err = error as AxiosError;
+      return rejectWithValue(err.message);
     }
   }
 );
@@ -79,13 +104,10 @@ export const createCustomer = createAsyncThunk(
 const customersSlice = createSlice({
   name: "customers",
   initialState: initialState,
-  reducers: {
-    // createCustomer: (state, action: PayloadAction<CustomerType>) => {
-    //   state.customers.push(action.payload);
-    // },
-  },
+  reducers: {},
   extraReducers: (build) => {
     build
+      //get all
       .addCase(getAllCustomers.pending, (state) => {
         state.status = "loading";
         state.error = null;
@@ -98,9 +120,8 @@ const customersSlice = createSlice({
       .addCase(getAllCustomers.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
-      });
-
-    build
+      })
+      //get one
       .addCase(getOneCustomerById.pending, (state) => {
         state.status = "loading";
         state.error = null;
@@ -118,6 +139,7 @@ const customersSlice = createSlice({
         state.status = "failed";
         state.error = action.payload as string;
       })
+      //delete customer
 
       .addCase(deleteCustomer.pending, (state) => {
         state.status = "loading";
@@ -139,6 +161,8 @@ const customersSlice = createSlice({
         state.status = "failed";
         state.error = action.payload as string;
       })
+
+      //create customer
       .addCase(createCustomer.pending, (state) => {
         state.status = "loading";
         state.error = null;
@@ -153,6 +177,24 @@ const customersSlice = createSlice({
         }
       })
       .addCase(createCustomer.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      //edit customer
+      .addCase(editCustomer.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(editCustomer.fulfilled, (state, action) => {
+        state.status = "success";
+        state.isSuccess = true;
+        if (typeof action.payload === "string") {
+          state.error = action.payload;
+        } else {
+          state.customers.push(action.payload);
+        }
+      })
+      .addCase(editCustomer.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
       });

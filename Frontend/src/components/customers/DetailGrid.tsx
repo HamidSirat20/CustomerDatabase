@@ -1,9 +1,11 @@
-import CustomerType from "../../types/CustomerType";
+import { Link } from "react-router-dom";
+import CustomerDetails from "../../types/CustomerDetails";
 import BackToButton from "../common/BackToButton";
 import defaultImage from "../common/defaultPhoto";
+import CustomerCreateEditType from "../../types/CustomerCreateEditType";
 
 interface Props {
-  customers: CustomerType[];
+  customers: CustomerDetails[];
   actions: (
     id: number,
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -19,7 +21,7 @@ const DetailGrid = ({ customers, buttonName, tableTile, actions }: Props) => {
         <BackToButton route="/" buttonName="Go to Back" />
         <h1 className="text-center mb-4">{tableTile}</h1>
         {customers.map((customer) => (
-          <div className="card">
+          <div className="card" id={customer.email} key={customer.id}>
             <div className="card-header bg-primary text-white">
               <h4>{`${customer.firstName} ${customer.lastName}`}</h4>
             </div>
@@ -39,7 +41,7 @@ const DetailGrid = ({ customers, buttonName, tableTile, actions }: Props) => {
                   <strong>Email:</strong> {customer.email}
                 </p>
                 <p>
-                  <strong>Phone Number:</strong> {customer.mobileNumber}
+                  <strong>Phone Number:</strong> {customer.phoneNumber}
                 </p>
                 <p>
                   <strong>Date of Birth:</strong>{" "}
@@ -51,9 +53,16 @@ const DetailGrid = ({ customers, buttonName, tableTile, actions }: Props) => {
                 </p>
                 <button
                   onClick={(e) => actions(customer.id, e)}
-                  className="btn btn-danger btn-sm">
+                  className="btn btn-danger btn-sm me-2 w-25">
+                  {" "}
                   {buttonName}
                 </button>
+                <Link
+                  to={`/customers/edit/${customer.id}`}
+                  className="btn btn-primary btn-sm w-25"
+                  style={{ textDecoration: "none", fontWeight: "bold" }}>
+                  Edit
+                </Link>
               </div>
             </div>
           </div>

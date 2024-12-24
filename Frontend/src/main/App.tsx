@@ -6,7 +6,8 @@ import About from "../components/about/About";
 import PageNotFound from "../components/PageNotFound";
 import CustomersPage from "../components/customers/CustomersPage";
 import Header from "../components/nav/Header";
-import CustomerForm from "../components/customers/CustomerForm";
+import AddCustomer from "../components/customers/AddCustomer";
+import EditCustomer from "../components/customers/EditCustomer";
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
             <Route path="/" element={<CustomersPage />} />
             <Route path="/about" element={<About />} />
             <Route path="/customers/:id" element={<CustomerDetails />} />
-            <Route path="/customers/form" element={<CustomerForm />} />
+            <Route path="/customers/add" element={<AddCustomer />} />
+            <Route path="/customers/edit/:id" element={<EditCustomer />} />
 
             <Route path="*" element={<PageNotFound />} />
           </Routes>
