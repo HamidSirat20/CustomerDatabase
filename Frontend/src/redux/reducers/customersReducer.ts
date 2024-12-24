@@ -57,14 +57,13 @@ export const deleteCustomer = createAsyncThunk<
   { id: number },
   number,
   { rejectValue: string }
->("deleteCustomer", async (id, ThunkAPI) => {
+>("deleteCustomer", async (id, { rejectWithValue }) => {
   try {
-    const response = await axios.delete(`${config.baseUrl}/customers/${id}`);
-    const data = response.data;
-    return data;
+    await axios.delete(`${config.baseUrl}/customers/${id}`);
+    return { id };
   } catch (error) {
     const err = error as AxiosError;
-    return ThunkAPI.rejectWithValue(err.message);
+    return rejectWithValue(err.message);
   }
 });
 
@@ -100,6 +99,7 @@ export const editCustomer = createAsyncThunk(
     }
   }
 );
+
 
 const customersSlice = createSlice({
   name: "customers",
@@ -148,14 +148,9 @@ const customersSlice = createSlice({
       .addCase(deleteCustomer.fulfilled, (state, action) => {
         state.status = "success";
         state.isSuccess = true;
-
-        if (typeof action.payload === "string") {
-          state.error = action.payload;
-        } else {
-          state.customers = state.customers.filter(
-            (c) => c.id !== action.payload.id
-          );
-        }
+        state.customers = state.customers.filter(
+          (customer) => customer.id !== action.payload.id
+        );
       })
       .addCase(deleteCustomer.rejected, (state, action) => {
         state.status = "failed";
@@ -168,13 +163,10 @@ const customersSlice = createSlice({
         state.error = null;
       })
       .addCase(createCustomer.fulfilled, (state, action) => {
+        console.log("Customer added:", action.payload); // Debug log
         state.status = "success";
         state.isSuccess = true;
-        if (typeof action.payload === "string") {
-          state.error = action.payload;
-        } else {
-          state.customers.push(action.payload);
-        }
+        state.customers = [...state.customers, action.payload];
       })
       .addCase(createCustomer.rejected, (state, action) => {
         state.status = "failed";
@@ -188,10 +180,11 @@ const customersSlice = createSlice({
       .addCase(editCustomer.fulfilled, (state, action) => {
         state.status = "success";
         state.isSuccess = true;
-        if (typeof action.payload === "string") {
-          state.error = action.payload;
-        } else {
-          state.customers.push(action.payload);
+        const index = state.customers.findIndex(
+          (customer) => customer.id === action.payload.id
+        );
+        if (index !== -1) {
+          state.customers[index] = action.payload;
         }
       })
       .addCase(editCustomer.rejected, (state, action) => {

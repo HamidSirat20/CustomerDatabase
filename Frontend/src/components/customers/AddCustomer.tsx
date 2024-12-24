@@ -28,9 +28,11 @@ const AddCustomer = () => {
     address: initialAddress,
   };
 
-  const handleDispatch = (customer: CustomerCreateEditType) => {
-    dispatch(createCustomer(customer));
-    nav("/");
+  const handleDispatch = async (customer: CustomerCreateEditType) => {
+    const result = await dispatch(createCustomer(customer));
+    if (createCustomer.fulfilled.match(result)) {
+      nav("/");
+    }
   };
 
   return (

@@ -27,13 +27,15 @@ const CustomerGrid = ({ customers, nav, actions }: Props) => {
         <tbody>
           {customers.map((customer) => (
             <tr
-              key={customer.id}
+              key={customer.email + customer.dateOfBirth}
               onClick={() => nav(`customers/${customer.id}`)}>
               <td>{customer.id}</td>
               <td>{`${customer.firstName} ${customer.lastName}`}</td>
               <td>{customer.email}</td>
               <td>
-                {`${customer.address.street}, ${customer.address.city}, ${customer.address.state}, ${customer.address.zipCode}, ${customer.address.country}`}
+                {customer.address
+                  ? `${customer.address.street}, ${customer.address.city}, ${customer.address.state}, ${customer.address.zipCode}, ${customer.address.country}`
+                  : "Address not available"}
               </td>
               <td>
                 <button
