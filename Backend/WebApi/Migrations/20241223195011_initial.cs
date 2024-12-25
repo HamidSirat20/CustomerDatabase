@@ -40,8 +40,8 @@ namespace WebApi.Migrations
                     LastName = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     MobileNumber = table.Column<string>(type: "TEXT", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Image = table.Column<string>(type: "TEXT", nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "TEXT", nullable: false),
                     AddressId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>

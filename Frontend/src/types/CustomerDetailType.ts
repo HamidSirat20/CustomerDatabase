@@ -1,6 +1,6 @@
 import AddressType from "./AddressType";
 
-interface CustomerDetails {
+interface CustomerDetailType {
   id: number;
   firstName: string;
   lastName: string;
@@ -11,4 +11,4 @@ interface CustomerDetails {
   address: AddressType;
 }
 
-export default CustomerDetails;
+export default CustomerDetailType;

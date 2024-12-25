@@ -41,11 +41,9 @@ export const getOneCustomerById = createAsyncThunk(
   "fetchACustomer",
   async (id: number, ThunkAPI) => {
     try {
-      console.log("Fetch result before:");
       const result = await axios.get(`${config.baseUrl}/customers/${id}`);
       const data = await result.data;
       return data;
-      console.log("Fetch result after:", data);
     } catch (error) {
       const err = error as AxiosError;
       return ThunkAPI.rejectWithValue(err.message);
@@ -71,7 +69,6 @@ export const createCustomer = createAsyncThunk(
   "createCustomer",
   async (customer: CustomerCreateEditType, { rejectWithValue }) => {
     try {
-      console.log("trying before respones");
       const response = await axios.post(
         `${config.baseUrl}/customers`,
         customer
@@ -99,7 +96,6 @@ export const editCustomer = createAsyncThunk(
     }
   }
 );
-
 
 const customersSlice = createSlice({
   name: "customers",
@@ -163,7 +159,6 @@ const customersSlice = createSlice({
         state.error = null;
       })
       .addCase(createCustomer.fulfilled, (state, action) => {
-        console.log("Customer added:", action.payload); // Debug log
         state.status = "success";
         state.isSuccess = true;
         state.customers = [...state.customers, action.payload];

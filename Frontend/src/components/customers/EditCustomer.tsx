@@ -40,7 +40,6 @@ const EditCustomer = () => {
   useEffect(() => {
     const existingCustomer = customers.find((c) => c.id === customerId);
     if (existingCustomer) {
-      console.log("Customer found in store:", existingCustomer);
       setCustomer({
         firstName: existingCustomer.firstName,
         lastName: existingCustomer.lastName,

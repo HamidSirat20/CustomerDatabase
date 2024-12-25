@@ -15,8 +15,6 @@ public class AutoMapperProfile : Profile
         CreateMap<CustomerReadDto, Customer>();
         CreateMap<Customer, CustomerReadDto>();
 
-        // CreateMap<CustomerUpdateDto, Customer>();
-        CreateMap<Customer, CustomerUpdateDto>();
 
         CreateMap<CustomerCreateDto, Customer>();
         CreateMap<Customer, CustomerCreateDto>();

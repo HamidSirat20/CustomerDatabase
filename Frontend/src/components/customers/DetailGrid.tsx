@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
-import CustomerDetails from "../../types/CustomerDetails";
 import BackToButton from "../common/BackToButton";
 import defaultImage from "../common/defaultPhoto";
-import CustomerCreateEditType from "../../types/CustomerCreateEditType";
+import CustomerDetailType from "../../types/CustomerDetailType";
 
 interface Props {
-  customers: CustomerDetails[];
+  customers: CustomerDetailType[];
   actions: (
     id: number,
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>

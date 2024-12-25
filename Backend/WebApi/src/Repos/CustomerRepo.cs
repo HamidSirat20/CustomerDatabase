@@ -1,4 +1,5 @@
 using AutoMapper;
+using Domain.src.Common;
 using Domain.src.Dtos;
 using Domain.src.Entities;
 using Domain.src.RepoInterfaces;
@@ -42,6 +43,7 @@ public class CustomerRepo : ICustomerRepo
         var customers = await _context.customers.Include(c => c.Address).ToListAsync();
         return _autoMapper.Map<IEnumerable<CustomerReadDto>>(customers);
     }
+
     public async Task<CustomerReadDto> GetCustomerByIdAsync(int id)
     {
         var customer = await _context.customers.Include(c => c.Address)
@@ -58,16 +60,23 @@ public class CustomerRepo : ICustomerRepo
         var customer = await _context.customers
         .Include(c => c.Address)
         .FirstOrDefaultAsync(c => c.Id == id);
-
         if (customer is null)
         {
             throw new ArgumentException($"Customer with ID {id} not found!");
         }
 
         _autoMapper.Map(updateDto, customer);
-        System.Console.WriteLine("customer logged: " + customer.Address.City);
+
+        System.Console.WriteLine("Customer address updated: " + customer.Address.City);
+
         _context.Entry(customer).State = EntityState.Modified;
+
         _context.Entry(customer.Address).State = EntityState.Modified;
+
         await _context.SaveChangesAsync();
+
+
     }
+
+
 }

@@ -1,13 +1,13 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import CustomerDetails from "../components/customers/CustomerDetails";
 import About from "../components/about/About";
 import PageNotFound from "../components/PageNotFound";
 import CustomersPage from "../components/customers/CustomersPage";
 import Header from "../components/nav/Header";
 import AddCustomer from "../components/customers/AddCustomer";
 import EditCustomer from "../components/customers/EditCustomer";
+import CustomerDetail from "../components/customers/CustomerDetails";
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
           <Routes>
             <Route path="/" element={<CustomersPage />} />
             <Route path="/about" element={<About />} />
-            <Route path="/customers/:id" element={<CustomerDetails />} />
+            <Route path="/customers/:id" element={<CustomerDetail />} />
             <Route path="/customers/add" element={<AddCustomer />} />
             <Route path="/customers/edit/:id" element={<EditCustomer />} />
 

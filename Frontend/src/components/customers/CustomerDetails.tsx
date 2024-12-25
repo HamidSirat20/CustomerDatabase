@@ -11,6 +11,8 @@ import {
   getOneCustomerById,
 } from "../../redux/reducers/customersReducer";
 import DetailGrid from "./DetailGrid";
+import CustomerType from "../../types/CustomerType";
+import CustomerDetailType from "../../types/CustomerDetailType";
 
 const CustomerDetails = () => {
   const { id } = useParams();
@@ -45,13 +47,25 @@ const CustomerDetails = () => {
         No customer data found!
       </div>
     );
+  function mapCustomerTypeToDetails(customer: CustomerType): CustomerDetailType {
+    return {
+      id: customer.id,
+      firstName: customer.firstName,
+      lastName: customer.lastName,
+      email: customer.email,
+      phoneNumber: customer.mobileNumber, // Map `mobileNumber` to `phoneNumber`
+      dateOfBirth: customer.dateOfBirth,
+      image: customer.image,
+      address: customer.address,
+    };
+  }
 
-  const customer = customers[0];
+  const customerDetails = customers.map(mapCustomerTypeToDetails);
 
   return (
     <>
       <DetailGrid
-        customers={customers}
+        customers={customerDetails}
         actions={HandleDelete}
         buttonName="Delete"
         tableTile="Customers Details"
