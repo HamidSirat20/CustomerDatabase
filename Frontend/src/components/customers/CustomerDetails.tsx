@@ -53,7 +53,7 @@ const CustomerDetails = () => {
       firstName: customer.firstName,
       lastName: customer.lastName,
       email: customer.email,
-      phoneNumber: customer.mobileNumber, // Map `mobileNumber` to `phoneNumber`
+      phoneNumber: customer.mobileNumber, 
       dateOfBirth: customer.dateOfBirth,
       image: customer.image,
       address: customer.address,

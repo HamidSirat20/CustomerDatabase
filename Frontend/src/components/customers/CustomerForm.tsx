@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import CustomerCreateEditType from "../../types/CustomerCreateEditType";
+import toBase64 from "../../toBase64";
 
 interface Props {
   newCustomer: CustomerCreateEditType;
@@ -18,6 +19,15 @@ const CustomerForm = ({ newCustomer, submitted, tableName }: Props) => {
   ) => {
     e.preventDefault();
     submitted(customer);
+  };
+
+  const onFileSelected = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): Promise<void> => {
+    e.preventDefault();
+    e.target.files &&
+      e.target.files[0] &&
+      setCustomer({ ...newCustomer, image: await toBase64(e.target.files[0]) });
   };
 
   return (
@@ -118,6 +128,24 @@ const CustomerForm = ({ newCustomer, submitted, tableName }: Props) => {
                 })
               }
             />
+          </div>
+        </div>
+
+        <div className="form-group row mb-3">
+          <label htmlFor="image" className="col-sm-4 col-form-label">
+            Image URL:
+          </label>
+          <div className="col-sm-8">
+            <input
+              type="file"
+              id="image"
+              className="form-control"
+              placeholder="Image url"
+              onChange={onFileSelected}
+            />
+            <div className="mt-2">
+              <img src={newCustomer.image} />
+            </div>
           </div>
         </div>
 
