@@ -7,7 +7,7 @@ interface HeaderProps {
 
 const Header = ({ subtitle }: HeaderProps) => {
   return (
-    <header className="container-fluid p-3  border-bottom mb-4">
+    <header className="container-fluid p-3  border-bottom mb-4 shadow bg-light">
       <div className="d-flex flex-wrap align-items-center justify-content-between">
         <nav className="d-flex flex-wrap mb-3 mb-lg-0">
           <NavLink

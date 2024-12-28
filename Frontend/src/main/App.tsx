@@ -1,4 +1,3 @@
-import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import About from "../components/about/About";
@@ -13,7 +12,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <div className="container">
+        <div>
           <Header subtitle="Customers data will be stored and protected." />
           <Routes>
             <Route path="/" element={<CustomersPage />} />

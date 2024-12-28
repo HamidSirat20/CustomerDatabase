@@ -12,7 +12,7 @@ interface Props {
 
 const CustomerGrid = ({ customers, nav, actions }: Props) => {
   return (
-    <div className="container mt-4">
+    <div className="container mt-4" style={{ cursor: "pointer" }}>
       <h1 className="text-center mb-4">Customer List</h1>
       <table className="table table-striped table-bordered">
         <thead className="thead-dark">
