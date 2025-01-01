@@ -28,15 +28,6 @@ const Header = ({ subtitle }: HeaderProps) => {
             }>
             About
           </NavLink>
-          <NavLink
-            to="/contact"
-            className={({ isActive }) =>
-              `btn px-3 mb-2 text-decoration-none ${
-                isActive ? "btn-primary text-white" : "btn-light text-dark"
-              }`
-            }>
-            Contact
-          </NavLink>
         </nav>
         <div className="d-flex align-items-center text-center text-lg-end">
           <div className="me-3">
