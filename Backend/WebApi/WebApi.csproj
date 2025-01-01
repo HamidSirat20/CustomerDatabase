@@ -22,8 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
-    <ProjectReference Include="..\Business\Business.csproj" />
-    <ProjectReference Include="..\Controller\Controller.csproj" />
   </ItemGroup>
 
 

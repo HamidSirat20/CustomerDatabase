@@ -61,8 +61,8 @@ app.MapPost("/customers", async ([FromBody] CustomerCreateDto dto, ICustomerRepo
     {
         return Results.ValidationProblem(errors);
     }
-    var customer = repo.AddCustomerAsync(dto);
-    return Results.Created($"customers/{customer.Id}", customer);
+    var customer =  repo.AddCustomerAsync(dto);
+    return  Results.Created($"customers/{customer.Id}", customer);
 }).ProducesProblem(404).Produces<CustomerCreateDto>(StatusCodes.Status200OK);
 
 app.MapPut("/customers/{Id:int}", async ([FromBody] CustomerUpdateDto dto, int Id, ICustomerRepo repo) =>
